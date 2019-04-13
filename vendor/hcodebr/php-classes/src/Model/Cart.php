@@ -162,7 +162,6 @@ class Cart extends Model {
                                 ':idcart'=>$this->getidcart()
                             ]);
 
-
         return Product::checkList($rows);
 
     }
@@ -221,7 +220,6 @@ class Cart extends Model {
             ]);
 
             $xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
-
             $result = $xml->Servicos->cServico;
 
             if ($result->MsgErro != ''){
