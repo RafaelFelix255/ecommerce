@@ -57,9 +57,9 @@
 
                                             <td class="product-quantity">
                                                 <div class="quantity buttons_added">
-                                                    <input type="button" class="minus" value="-" onclick="window.location.href = '/cart/{$value.idproduct}/minus'">
+                                                    <input type="button" class="minus" title="Excluir" value="-" onclick="window.location.href = '/cart/{$value.idproduct}/minus'">
                                                     <input type="number" size="4" class="input-text qty text" title="Qty" value="{$value.nrqtde}" min="0" step="1">
-                                                    <input type="button" class="plus" value="+" onclick="window.location.href = '/cart/{$value.idproduct}/add'">
+                                                    <input type="button" class="plus" title="Adicionar" value="+" onclick="window.location.href = '/cart/{$value.idproduct}/add'">
                                                 </div>
                                             </td>
 
@@ -98,7 +98,7 @@
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>R$ {function="formatPrice($cart.vlfreight)"}{if="$cart.nrdays > 0"} <small>prazo de {$cart.nrdays} dia(s)</small>{/if}</td>
+                                                <td>R$ {function="formatPrice($cart.vlfreight)"}{if="$cart.nrdays > 0"}<small> prazo de {$cart.nrdays} dia(s)</small>{/if}</td>
                                             </tr>
 
                                             <tr class="order-total">

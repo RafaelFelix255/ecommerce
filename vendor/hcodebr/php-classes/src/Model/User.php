@@ -28,7 +28,7 @@ class User extends Model {
                 //Não está logado
                 return false;
         } else {
-            if ($inadmin === true && (bool)$_SESSION[User::SESSION]["inadmin"] === true){
+            if ((bool)$_SESSION[User::SESSION]["inadmin"] === $inadmin){
                 return true;
             } else if ($inadmin === false){
                 return true;
@@ -68,7 +68,7 @@ class User extends Model {
     }
 
     public static function verifyLogin($inadmin = true){
-        if (User::checkLogin($inadmin)) {
+        if(!User::checkLogin($inadmin)) {
             header("Location: /admin/login");
             exit;
         }

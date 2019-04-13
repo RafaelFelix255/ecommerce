@@ -37,6 +37,8 @@ class Cart extends Model {
                 $cart->setToSession();
             }
         }
+
+        return $cart;
     }
 
     public function setToSession(){
@@ -91,7 +93,7 @@ class Cart extends Model {
     public function addProduct(Product $product){
         $sql = new Sql();
         
-        $sql->query("inset into tb_cartsproducts
+        $sql->query("insert into tb_cartsproducts
                         (idcart, idproduct)
                      values
                         (:idcart, :idproduct)", [
@@ -106,7 +108,7 @@ class Cart extends Model {
     public function removeProduct(Product $product, $all = false){
         $sql = new Sql();
         
-        if ($all = true){
+        if ($all === true){
             $sql->query("update tb_cartsproducts
                             set dtremoved = now()
                           where idcart = :idcart
@@ -147,14 +149,14 @@ class Cart extends Model {
                                 from tb_cartsproducts a, tb_products b
                                where a.idproduct = b.idproduct
                                  and a.idcart = :idcart
-                                 and a.dtremove is null
+                                 and a.dtremoved is null
                                group by b.idproduct,
                                         b.desproduct,
                                         b.vlprice,
                                         b.vlwidth,
                                         b.vlheight,
                                         b.vllength,
-                                        b.vlweight
+                                        b.vlweight,
                                         b.desurl
                                order by b.idproduct", [
                                 ':idcart'=>$this->getidcart()
@@ -196,8 +198,8 @@ class Cart extends Model {
             $totals['vlheight'] = 2;
         }
 
-        if ($totals['vllenght'] < 16) {
-            $totals['vllenght'] = 16;
+        if ($totals['vllength'] < 16) {
+            $totals['vllength'] = 16;
         }
 
         if ($totals['nrqtde'] > 0) {
@@ -209,10 +211,10 @@ class Cart extends Model {
                 'sCepDestino'=>$nrzipcode,
                 'nVlPeso'=>$totals['vlweight'],
                 'nCdFormato'=>'1',
-                'nVlComprimento'=>$totals['vllenght'],
+                'nVlComprimento'=>$totals['vllength'],
                 'nVlAltura'=>$totals['vlheight'],
                 'nVlLargura'=>$totals['vlwidth'],
-                'nVlDiametro'=>'',
+                'nVlDiametro'=>'0',
                 'sCdMaoPropria'=>'S',
                 'nVlValorDeclarado'=>$totals['vlprice'],
                 'sCdAvisoRecebimento'=>'S'
@@ -222,8 +224,8 @@ class Cart extends Model {
 
             $result = $xml->Servicos->cServico;
 
-            if ($result->msgErro != ''){
-                Cart::setMsgError($result->msgErro);
+            if ($result->MsgErro != ''){
+                Cart::setMsgError($result->MsgErro);
             } else {
                 Cart::clearMsgError();
             }
@@ -249,7 +251,7 @@ class Cart extends Model {
         $_SESSION[Cart::SESSION_ERROR] = $msg;
     }
     
-    public static function getMsgError($msg){
+    public static function getMsgError(){
         $msg = (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : "";
 
         Cart::clearMsgError();

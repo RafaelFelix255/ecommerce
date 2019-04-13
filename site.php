@@ -68,7 +68,12 @@ $app->get("/cart/:idproduct/add", function($idproduct) {
 	$product->get((int)$idproduct);
 
 	$cart = Cart::getFromSession();
-	$cart->addProduct($product);
+
+	$qtde = (isset($_GET['qtde'])) ? (int)$_GET['qtde'] : 1;
+
+	for ($i = 0; $i < $qtde; $i++) {
+		$cart->addProduct($product);
+	}	
 
 	header("Location: /cart");
 	exit;
