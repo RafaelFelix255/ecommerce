@@ -201,11 +201,17 @@ class Cart extends Model {
             $totals['vllength'] = 16;
         }
 
+        if ($totals['vlprice'] <= 3000) {
+            $service = 41106;
+        } else {
+            $service = 40010;
+        }
+
         if ($totals['nrqtde'] > 0) {
             $qs = http_build_query([
                 'nCdEmpresa'=>'',
                 'sDsSenha'=>'',
-                'nCdServico'=>'40010',
+                'nCdServico'=>$service,
                 'sCepOrigem'=>'86812000',
                 'sCepDestino'=>$nrzipcode,
                 'nVlPeso'=>$totals['vlweight'],
