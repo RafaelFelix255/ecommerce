@@ -332,6 +332,28 @@ class User extends Model {
         $_SESSION[User::SUCCESS] = NULL;
     }
 
+    public function getOrders(){
+        $sql = new Sql();
+        
+        $results = $sql->select("select *
+                                   from tb_orders a,
+                                        tb_ordersstatus b,
+                                        tb_carts c,
+                                        tb_users d,
+                                        tb_addresses e,
+                                        tb_persons f
+                                  where a.idstatus = b.idstatus
+                                    and a.idcart = c.idcart
+                                    and a.iduser = d.iduser
+                                    and a.idaddress = e.idaddress
+                                    and f.idperson = d.idperson
+                                    and a.iduser = :iduser", [
+            ':iduser'=>$this->getiduser()
+        ]);
+      
+        return $results;
+    }
+
 }
 
 ?>
