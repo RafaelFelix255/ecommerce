@@ -6,10 +6,17 @@ use \Hcode\Model\User;
 $app->get('/admin/users', function() {	
 	User::verifyLogin();	
 
-	$search = (isset($_GET["search"])) ? $_GET["search"] : "";
+	$search = [
+		'name'=>(isset($_GET["name"])) ? $_GET["name"] : '',
+		'email'=>(isset($_GET["email"])) ? $_GET["email"] : '',
+		'login'=>(isset($_GET["login"])) ? $_GET["login"] : ''
+	];
+
 	$page = (isset($_GET["page"])) ? (int)$_GET["page"] : 1;
 	
-	if ($search != '') {
+	if ($search['name'] != '' ||
+	    $search['email'] != '' ||
+	    $search['login'] != '') {
 		$pagination = User::getPageSearch($search, $page);
 	} else {
 		$pagination = User::getPage($page);

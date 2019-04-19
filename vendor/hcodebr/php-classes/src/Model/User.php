@@ -374,22 +374,32 @@ class User extends Model {
         ];
     }
 
-    public static function getPageSearch($search, $page = 1, $itensPerPage = 10){
-        
+    public static function getPageSearch($parameters, $page = 1, $itensPerPage = 10){
+
         $start = ($page - 1) * $itensPerPage;
         
         $sql = new Sql();
+
+        if ($parameters['name'] !== '') {
+            $field = "b.desperson";
+            $search = $parameters['name'];
+        } else if ($parameters['email'] !== '') {
+            $field = "b.desemail";
+            $search = $parameters['email'];
+        } else if ($parameters['login'] !== '') {
+            $field = "a.deslogin";
+            $search = $parameters['login'];
+        }
+
         $results = $sql->select("select sql_calc_found_rows *
                                    from tb_users a, tb_persons b
                                   where a.idperson = b.idperson
-                                    and b.desperson like :search
-                                     or b.desemail = :search
-                                     or a.deslogin like :search
+                                    and $field like :search
                                   order by a.iduser
                                   limit $start, $itensPerPage;", [
-                                      ':search'=>'%'.$search.'%'
-                                  ]);
-        
+                                    ':search'=>'%'.$search.'%'
+                                ]);
+
         $resultsTotal = $sql->select("select found_rows() as nrtotal;");
         
         return [
